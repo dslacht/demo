@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge;chrome=1">
+    <title>LaunchDarkly tutorial</title>
+    <!-- Use LaunchDarkly sdk -->
+    <script src="https://unpkg.com/launchdarkly-js-client-sdk@2"></script>
+  </head>
+  <body>
+  <h1 id="myHeader">Flag Variation</h1>
+    <script>
+      // Set up the user properties. This user should appear on your LaunchDarkly users dashboard
+      // soon after you run the demo.
+      var user = {
+        name: 'Stacey',
+        key: 'stacey',
+      };
+
+      var div = document.createElement('div');
+      document.body.appendChild(div);
+
+      div.appendChild(document.createTextNode('Initializing...'));
+
+      // Create a new LDClient instance with your environment-specific SDK key
+      var ldclient = LDClient.initialize('6317adbfac1431117a2c8ac7', user);
+
+      function render() {
+        var flagValue = ldclient.variation('ui-change', false);
+        var label = (flagValue ? 'Showing ' : 'Not showing') + flagValue + ' to ' + user.key;
+        console.log("SDK successfully connected! The value of ui-change is " + flagValue + " for " + user.key)
+        div.replaceChild(document.createTextNode(label), div.firstChild);
+        document.getElementById("myHeader").style.color = flagValue;
+      }
+
+
+      ldclient.on('ready', render);
+      ldclient.on('change', render);
+      
+
+    </script>
+    
+  </body>
+</html>
